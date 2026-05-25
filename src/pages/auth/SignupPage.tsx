@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Brain, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../components/ui/Toast';
@@ -20,6 +20,7 @@ export default function SignupPage() {
 
   const { signUp, resendSignUpEmail } = useAuth();
   const { success, error: toastError } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (resendCountdown > 0) {
@@ -48,9 +49,9 @@ export default function SignupPage() {
       toastError('Sign up failed');
     } else {
       // If Supabase has email confirmation disabled, it returns session/user info immediately
-      if (data?.session || data?.user?.identities?.length === 0) {
+      if (data?.session || data?.user) {
         success('Account created!', 'Welcome to ExamSense AI!');
-        // Session will be updated by AuthContext listener, causing redirect to dashboard
+        navigate('/dashboard');
       } else {
         setSignupSuccess(true);
         success('Account created!', 'Verification email sent!');

@@ -42,13 +42,19 @@ export default function SignupPage() {
     if (!passwordChecks.every(c => c.ok)) { setError('Please meet all password requirements.'); return; }
 
     setLoading(true);
-    const { error: err } = await signUp(email, password, fullName);
+    const { data, error: err } = await signUp(email, password, fullName);
     if (err) {
       setError(err.message.includes('already registered') ? 'This email is already in use. Try logging in.' : err.message);
       toastError('Sign up failed');
     } else {
-      setSignupSuccess(true);
-      success('Account created!', 'Verification email sent!');
+      // If Supabase has email confirmation disabled, it returns session/user info immediately
+      if (data?.session || data?.user?.identities?.length === 0) {
+        success('Account created!', 'Welcome to ExamSense AI!');
+        // Session will be updated by AuthContext listener, causing redirect to dashboard
+      } else {
+        setSignupSuccess(true);
+        success('Account created!', 'Verification email sent!');
+      }
     }
     setLoading(false);
   }

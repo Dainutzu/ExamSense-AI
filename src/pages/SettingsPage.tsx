@@ -10,7 +10,7 @@ import { formatLKR } from '../utils/formatters';
 
 export default function SettingsPage() {
   const { profile, user, refreshProfile } = useAuth();
-  const { success, error: toastError, info } = useToast();
+  const { success, error: toastError } = useToast();
 
   const [fullName, setFullName] = useState(profile?.full_name ?? '');
   const [savingProfile, setSavingProfile] = useState(false);
@@ -41,8 +41,17 @@ export default function SettingsPage() {
     setSavingPass(false);
   }
 
-  function simulateUpgrade() {
-    info('Coming soon', 'Payment integration with Stripe will be available soon. Contact support for Pro access.');
+  async function simulateUpgrade() {
+    if (!user) return;
+    setSavingProfile(true);
+    const { error } = await supabase.from('profiles').update({ plan: 'pro' }).eq('id', user.id);
+    if (error) {
+      toastError('Failed to upgrade', error.message);
+    } else {
+      await refreshProfile();
+      success('Upgraded to Pro!', 'Welcome to the Pro plan! Unlimited uploads enabled.');
+    }
+    setSavingProfile(false);
   }
 
   return (
@@ -179,6 +188,23 @@ export default function SettingsPage() {
                   }
                 </p>
               </>
+            )}
+            {isPro && (
+              <div style={{ marginTop: 12, display: 'flex', justifyContent: 'flex-start' }}>
+                <button onClick={async () => {
+                  if (!user) return;
+                  setSavingProfile(true);
+                  const { error } = await supabase.from('profiles').update({ plan: 'free', upload_count: 0 }).eq('id', user.id);
+                  if (error) toastError('Failed to reset', error.message);
+                  else {
+                    await refreshProfile();
+                    success('Reset to Free Plan', 'Your plan has been reset to Free and your upload count has been set to 0.');
+                  }
+                  setSavingProfile(false);
+                }} className="btn btn-secondary" style={{ fontSize: '0.80rem', padding: '6px 12px' }}>
+                  Reset to Free Plan (Admin Testing)
+                </button>
+              </div>
             )}
           </div>
 

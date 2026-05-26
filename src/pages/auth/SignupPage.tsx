@@ -48,11 +48,16 @@ export default function SignupPage() {
       setError(err.message.includes('already registered') ? 'This email is already in use. Try logging in.' : err.message);
       toastError('Sign up failed');
     } else {
-      // Check if session or user is immediately returned (meaning email confirm is disabled)
-      if (data?.session || data?.user?.identities?.length === 0) {
+      // If identities is returned but empty, it means the user/email already exists in Supabase
+      if (data?.user && data.user.identities && data.user.identities.length === 0) {
+        setError('This email is already in use. Please try signing in instead.');
+        toastError('Sign up failed');
+      } else if (data?.session) {
+        // Direct session returned (email confirmation disabled)
         success('Account created!', 'Welcome to ExamSense AI!');
         navigate('/dashboard');
       } else {
+        // Email confirmation enabled, verification email sent
         setSignupSuccess(true);
         success('Account created!', 'Verification email sent!');
       }

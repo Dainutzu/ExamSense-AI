@@ -170,30 +170,30 @@ const SUBJECT_DEFINITIONS: Record<SubjectCategory, SubjectDefinition> = {
     ]
   },
   cs: {
-    name: 'Computer Science',
-    keywords: ['algorithm', 'data structure', 'complexity', 'array', 'list', 'function', 'class', 'object', 'recursion', 'memory', 'pointer', 'network', 'compiler', 'database', 'string', 'loop', 'variable', 'binary', 'tree', 'graph', 'sorting', 'programming', 'code', 'stack', 'queue'],
+    name: 'Computer Science & IT',
+    keywords: ['algorithm', 'data structure', 'complexity', 'array', 'list', 'function', 'class', 'object', 'recursion', 'memory', 'pointer', 'network', 'compiler', 'database', 'string', 'loop', 'variable', 'binary', 'tree', 'graph', 'sorting', 'programming', 'code', 'stack', 'queue', 'information', 'technology', 'system', 'systems', 'software', 'hardware', 'internet', 'security', 'digital', 'data', 'cloud', 'computer', 'computing', 'server', 'client', 'web', 'application', 'tech', 'cybersecurity', 'developer', 'it', 'techolnofy'],
     candidateTopics: [
-      { name: 'Algorithms & Complexity', keywords: ['algorithm', 'sorting', 'searching', 'complexity', 'big o', 'recursion', 'binary search'] },
-      { name: 'Data Structures', keywords: ['array', 'list', 'tree', 'graph', 'stack', 'queue', 'linked list', 'binary tree', 'pointer'] },
-      { name: 'Object-Oriented Programming', keywords: ['class', 'object', 'inheritance', 'polymorphism', 'encapsulation', 'interface'] },
-      { name: 'Database Systems', keywords: ['database', 'sql', 'query', 'table', 'primary key', 'foreign key', 'normalization'] },
-      { name: 'Computer Networks', keywords: ['network', 'protocol', 'ip', 'tcp', 'http', 'packet', 'router', 'client', 'server'] },
-      { name: 'Operating Systems & Memory', keywords: ['memory', 'pointer', 'process', 'thread', 'cpu', 'address', 'virtual memory', 'cache'] },
-      { name: 'Software Engineering Principles', keywords: ['design patterns', 'git', 'testing', 'code review', 'refactoring', 'architecture'] }
+      { name: 'Information Systems & Infrastructure', keywords: ['system', 'systems', 'infrastructure', 'hardware', 'software', 'enterprise', 'erp', 'crm', 'information'] },
+      { name: 'Database Systems & Data Models', keywords: ['database', 'sql', 'query', 'table', 'primary key', 'foreign key', 'normalization', 'data'] },
+      { name: 'Computer Networks & Internet', keywords: ['network', 'protocol', 'ip', 'tcp', 'http', 'packet', 'router', 'client', 'server', 'internet'] },
+      { name: 'Cloud Computing & Storage', keywords: ['cloud', 'storage', 'server', 'hosting', 'virtualization', 'aws', 'azure'] },
+      { name: 'Cybersecurity & Information Protection', keywords: ['security', 'cybersecurity', 'firewall', 'encryption', 'cryptography', 'threat', 'hack', 'attack'] },
+      { name: 'Algorithms & Computational Logic', keywords: ['algorithm', 'sorting', 'searching', 'complexity', 'big o', 'recursion', 'binary search', 'logic'] },
+      { name: 'Software Development & Coding', keywords: ['code', 'programming', 'software', 'developer', 'testing', 'git', 'refactoring'] }
     ],
     recommendationTemplates: [
-      { text: 'Focus heavily on [TOPIC_1] trace tables and complexity analysis.', importance: 'critical' },
-      { text: 'Master [TOPIC_2] implementations and pointer/reference operations.', importance: 'critical' },
-      { text: 'Practice writing clean pseudocode and class structures for [TOPIC_3].', importance: 'important' },
-      { text: 'Review relational query patterns and indexing for [TOPIC_4].', importance: 'important' },
-      { text: 'Review networking stack and protocols for [TOPIC_5].', importance: 'optional' }
+      { text: 'Focus heavily on [TOPIC_1] architectures and workflow integrations.', importance: 'critical' },
+      { text: 'Master [TOPIC_2] schemas and querying steps.', importance: 'critical' },
+      { text: 'Practice resolving configurations and network tables for [TOPIC_3].', importance: 'important' },
+      { text: 'Review core definitions and cloud service models for [TOPIC_4].', importance: 'important' },
+      { text: 'Review security protocols and access controls for [TOPIC_5].', importance: 'optional' }
     ],
     predictionTemplates: [
-      'Complexity Proofs of [TOPIC_1]',
-      'Data Structure Manipulation for [TOPIC_2]',
-      'Class Diagram & Code for [TOPIC_3]',
-      'Query Optimization in [TOPIC_4]',
-      'Protocol Workflow of [TOPIC_5]'
+      'Architectural Designs of [TOPIC_1]',
+      'Data Modeling Tasks for [TOPIC_2]',
+      'Routing Diagrams in [TOPIC_3]',
+      'Service Level Optimization for [TOPIC_4]',
+      'Threat Modeling of [TOPIC_5]'
     ]
   },
   history: {
@@ -310,8 +310,20 @@ function analyzePaperHeuristically(text: string, fileName: string): AnalysisResu
     if (subjKey === 'biology' && lName.includes('bio')) {
       matchCount += 30;
     }
-    if (subjKey === 'cs' && (lName.includes('cs') || lName.includes('comp') || lName.includes('prog') || lName.includes('code') || lName.includes('java') || lName.includes('python'))) {
-      matchCount += 30;
+    if (subjKey === 'cs' && (
+      lName.includes('cs') || 
+      lName.includes('comp') || 
+      lName.includes('prog') || 
+      lName.includes('code') || 
+      lName.includes('java') || 
+      lName.includes('python') ||
+      lName.includes('tech') ||
+      lName.includes('info') ||
+      lName.includes('system') ||
+      lName.includes('network') ||
+      lName.includes('it')
+    )) {
+      matchCount += 50;
     }
     if (subjKey === 'history' && (lName.includes('hist') || lName.includes('social') || lName.includes('war'))) {
       matchCount += 30;

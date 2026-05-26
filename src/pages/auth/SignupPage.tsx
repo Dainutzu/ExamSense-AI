@@ -48,8 +48,8 @@ export default function SignupPage() {
       setError(err.message.includes('already registered') ? 'This email is already in use. Try logging in.' : err.message);
       toastError('Sign up failed');
     } else {
-      // If Supabase has email confirmation disabled, it returns session/user info immediately
-      if (data?.session || data?.user) {
+      // Check if session or user is immediately returned (meaning email confirm is disabled)
+      if (data?.session || data?.user?.identities?.length === 0) {
         success('Account created!', 'Welcome to ExamSense AI!');
         navigate('/dashboard');
       } else {

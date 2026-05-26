@@ -23,11 +23,14 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('verified') === 'true') {
+    const hasVerifiedParam = params.get('verified') === 'true';
+    const hasVerifiedHash = window.location.hash.includes('type=signup') || window.location.hash.includes('verified=true');
+    
+    if (hasVerifiedParam || hasVerifiedHash) {
       setShowVerifiedBanner(true);
-      success('Email Verified! 🎉', 'Welcome to ExamSense AI. Your email has been successfully confirmed.');
+      success('Email Verified! 🎉', 'Welcome to ExamSense AI. Your email has been confirmed.');
       
-      // Clean query parameter from URL
+      // Clean query and hash parameters from URL
       const newUrl = window.location.pathname;
       window.history.replaceState({}, document.title, newUrl);
     }

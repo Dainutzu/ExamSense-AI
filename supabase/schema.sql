@@ -53,15 +53,22 @@ CREATE POLICY "Users can delete own uploads" ON uploads FOR DELETE USING (auth.u
 
 -- ─── Analyses ──────────────────────────────────────────────────────────────
 CREATE TABLE analyses (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  upload_id         UUID NOT NULL REFERENCES uploads(id) ON DELETE CASCADE,
-  user_id           UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  topics            JSONB,    -- [{ name, count, priority }]
-  recommendations   JSONB,    -- [{ text, importance }]
-  predicted_areas   JSONB,    -- [{ area, confidence }]
-  raw_text          TEXT,
-  question_count    INT DEFAULT 0,
-  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id                    UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  upload_id             UUID NOT NULL REFERENCES uploads(id) ON DELETE CASCADE,
+  user_id               UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  topics                JSONB,    -- [{ name, count, priority }]
+  recommendations       JSONB,    -- [{ text, importance }]
+  predicted_areas       JSONB,    -- [{ area, confidence }]
+  raw_text              TEXT,
+  question_count        INT DEFAULT 0,
+  -- Enriched fields
+  detected_subjects     JSONB,    -- TEXT[] as JSON
+  topic_mapping         JSONB,    -- [{ question, core_topic, related_fields, explanation, exam_notes }]
+  key_theories          JSONB,    -- [{ name, subject, description }]
+  high_priority_topics  JSONB,    -- TEXT[] as JSON
+  predicted_questions   JSONB,    -- TEXT[] as JSON
+  study_plan            JSONB,    -- [{ day, focus, tasks }]
+  created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 ALTER TABLE analyses ENABLE ROW LEVEL SECURITY;

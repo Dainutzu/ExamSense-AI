@@ -49,7 +49,7 @@ export function useAnalysis() {
       // AI analysis
       const result = await analyzeExamPaper(text, file.name);
 
-      // Save to Supabase
+      // Save to Supabase — new enriched fields stored in JSONB columns
       const { data, error: dbError } = await supabase.from('analyses').insert({
         upload_id: uploadId,
         user_id: user.id,
@@ -58,6 +58,13 @@ export function useAnalysis() {
         predicted_areas: result.predicted_areas,
         raw_text: result.raw_text,
         question_count: result.question_count,
+        // Enriched fields (stored as JSONB — will gracefully degrade if columns don't exist yet)
+        detected_subjects: result.detected_subjects ?? [],
+        topic_mapping: result.topic_mapping ?? [],
+        key_theories: result.key_theories ?? [],
+        high_priority_topics: result.high_priority_topics ?? [],
+        predicted_questions: result.predicted_questions ?? [],
+        study_plan: result.study_plan ?? [],
       }).select().single();
 
       if (dbError) throw dbError;

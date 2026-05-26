@@ -25,17 +25,7 @@ export type Upload = {
   created_at: string;
 };
 
-export type Analysis = {
-  id: string;
-  upload_id: string;
-  user_id: string;
-  topics: Topic[];
-  recommendations: Recommendation[];
-  predicted_areas: PredictedArea[];
-  raw_text: string;
-  question_count: number;
-  created_at: string;
-};
+// ─── Enriched Analysis Types ───────────────────────────────────────────────
 
 export type Topic = {
   name: string;
@@ -51,4 +41,43 @@ export type Recommendation = {
 export type PredictedArea = {
   area: string;
   confidence: number;
+};
+
+export type TopicMapping = {
+  question: string;
+  core_topic: string;
+  related_fields: string[];
+  explanation: string;
+  exam_notes: string;
+};
+
+export type KeyTheory = {
+  name: string;
+  subject: string;
+  description: string;
+};
+
+export type StudyPlanItem = {
+  day: string;
+  focus: string;
+  tasks: string[];
+};
+
+export type Analysis = {
+  id: string;
+  upload_id: string;
+  user_id: string;
+  topics: Topic[];
+  recommendations: Recommendation[];
+  predicted_areas: PredictedArea[];
+  raw_text: string;
+  question_count: number;
+  // Enriched fields
+  detected_subjects: string[];
+  topic_mapping: TopicMapping[];
+  key_theories: KeyTheory[];
+  high_priority_topics: string[];
+  predicted_questions: string[];
+  study_plan: StudyPlanItem[];
+  created_at: string;
 };
